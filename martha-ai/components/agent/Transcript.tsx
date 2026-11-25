@@ -1,6 +1,7 @@
 "use client";
 import { Mic } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { Monogram } from "@/components/brand/Monogram";
 import type { StoredMessage } from "@/lib/export";
 
 /** Minimal markdown for chat replies: **bold** and "- " bullets. */
@@ -42,11 +43,9 @@ export function Transcript({ messages, streaming }: { messages: StoredMessage[];
       {messages.map((m, i) =>
         m.role === "assistant" ? (
           <div key={i} className="rise flex gap-3">
-            <div
-              className="mt-1 size-6 shrink-0 rounded-full"
-              style={{ background: "conic-gradient(var(--accent), var(--accent-2), var(--accent))" }}
-              aria-hidden="true"
-            />
+            <div className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border border-white/10 bg-white/[0.04]" aria-hidden="true">
+              <Monogram className="size-4 text-text" />
+            </div>
             <div className="min-w-0 text-[15px] leading-6 text-text/90">
               {renderRich(m.content)}
               {m.interrupted && <span className="mt-1 inline-block text-xs text-muted">interrupted</span>}
@@ -54,7 +53,7 @@ export function Transcript({ messages, streaming }: { messages: StoredMessage[];
           </div>
         ) : (
           <div key={i} className="rise flex justify-end">
-            <div className="max-w-[85%] rounded-md rounded-br-[4px] bg-surface-2 px-3.5 py-2 text-[15px] leading-6">
+            <div className="max-w-[85%] rounded-[16px] rounded-br-[4px] border border-white/10 bg-white/[0.05] px-3.5 py-2 text-[15px] leading-6">
               {m.via === "voice" && <Mic className="mr-1.5 inline size-3.5 text-muted" aria-label="spoken" />}
               {m.content}
             </div>
@@ -63,11 +62,9 @@ export function Transcript({ messages, streaming }: { messages: StoredMessage[];
       )}
       {streaming && (
         <div className="flex gap-3">
-          <div
-            className="mt-1 size-6 shrink-0 rounded-full"
-            style={{ background: "conic-gradient(var(--accent), var(--accent-2), var(--accent))" }}
-            aria-hidden="true"
-          />
+          <div className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border border-white/10 bg-white/[0.04]" aria-hidden="true">
+            <Monogram className="size-4 text-text" />
+          </div>
           <div className="caret min-w-0 text-[15px] leading-6 text-text/90">{renderRich(streaming)}</div>
         </div>
       )}

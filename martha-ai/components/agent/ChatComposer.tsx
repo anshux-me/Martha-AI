@@ -24,7 +24,7 @@ export function ChatComposer({
   };
 
   return (
-    <div className="border-t border-border bg-surface px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))]">
+    <div className="mx-4 border-t border-white/10 pt-3 pb-[max(14px,env(safe-area-inset-bottom))]">
       {showChips && (
         <div className="no-scrollbar -mx-1 mb-3 flex gap-2 overflow-x-auto px-1 pb-1">
           {CHIPS.map((c) => (
@@ -33,7 +33,7 @@ export function ChatComposer({
               type="button"
               disabled={disabled}
               onClick={() => send(c)}
-              className="shrink-0 rounded-full border border-border px-3 py-1.5 text-sm text-muted transition hover:border-accent hover:text-text disabled:opacity-50"
+              className="shrink-0 rounded-full border border-white/10 px-3 py-1.5 text-[13px] text-muted transition hover:border-accent hover:text-text disabled:opacity-50"
             >
               {c}
             </button>
@@ -50,7 +50,7 @@ export function ChatComposer({
         <button
           type="button"
           onClick={onVoice}
-          className="grid size-11 shrink-0 place-items-center rounded-full bg-surface-2 text-muted transition hover:text-accent"
+          className="grid size-11 shrink-0 place-items-center rounded-full border border-white/15 text-muted transition hover:border-accent hover:text-accent"
           aria-label="Switch to voice"
           title="Switch to voice"
         >
@@ -69,7 +69,7 @@ export function ChatComposer({
           maxLength={2000}
           placeholder="Ask about models, range, charging, EMI…"
           aria-label="Message Martha"
-          className="max-h-28 min-h-11 flex-1 resize-none rounded-[22px] border border-border bg-surface-2 px-4 py-2.5 text-[15px] text-text placeholder:text-muted focus:border-accent-2 focus:outline-none"
+          className="max-h-28 min-h-11 flex-1 resize-none rounded-[22px] border border-white/10 bg-white/[0.04] px-4 py-2.5 text-[15px] text-text placeholder:text-muted focus:border-white/30 focus:outline-none"
           style={{ fieldSizing: "content" } as React.CSSProperties}
         />
         <button

@@ -186,19 +186,18 @@ Icon (accent, 24 px) + H3 + one line of copy. Steps use large muted numerals `01
 
 Choices are saved in this browser.
 
-### 8.3 Voice orb states
-Diameter 180 px desktop / 160 px mobile. Built with Framer Motion. Mic level comes from an `AnalyserNode`. Browser speech can't be measured that way, so the speaking animation is driven by word-boundary events instead.
+### 8.3 Voice visualizer states
+A 232 px canvas ring of 72 fine radial bars around the monogram (`VoiceVisualizer.tsx`), with a hairline inner circle. Under it: a serif italic status headline ("Listening", "Thinking…", "Martha", "You're muted") and the live caption. A mono "VOICE CALL · mm:ss" timer sits above.
 
-| State | Visual | Label | Colour |
-|---|---|---|---|
-| Connecting | Soft fade-in, slow rotation | "Connecting…" | muted |
-| Listening | Breathing scale 1.0 ↔ 1.04; **inner ripples react to mic level** | "Listening" | `--accent` |
-| Thinking | Conic gradient spins (1.2 s/rev), shimmering ring | "Thinking…" | `--accent-2` |
-| Speaking | **A soft pulse on each spoken word** (speech `boundary` events), with a gentle looping pulse on browsers that don't fire them; mint → blue gradient | "Speaking" | accent → accent-2 |
-| Muted | Desaturated, mic-off badge on the orb | "Muted" | `--text-muted` |
-| Error / reconnecting | Brief red ring flash, then the previous state | "Reconnecting…" | `--danger` |
+| State | Visual | Colour |
+|---|---|---|
+| Connecting / transcribing / thinking | A highlight sweeps around the ring | `--accent-2` |
+| Listening | Bars follow the microphone level with a gentle idle breath; two soft ripple rings expand outward | `--accent` |
+| Speaking | Bars follow Martha's audio output (Orpheus) | `--text` |
+| Muted | Still, dim ticks; monogram dimmed; "You're muted" | `--text-muted` |
+| Idle / paused | Still, dim ticks; "Resume call" button | `--text-muted` |
 
-The status pill in the header mirrors the label with a coloured dot (`●`). With `prefers-reduced-motion`, the orb only changes colour and opacity, with no scaling or rotation.
+The header status label (mono, uppercase, coloured dot) mirrors the state. With `prefers-reduced-motion`, the bars hold still and the ripples are disabled.
 
 ### 8.4 Transcript and messages
 | Element | Style |
@@ -263,7 +262,7 @@ The status pill in the header mirrors the label with a coloured dot (`●`). Wit
 | `SegmentedToggle` | Voice / Chat |
 | `VoiceSettings` | Popover: voice dropdown with preview, speed slider, interrupt toggle |
 | `StatusPill` | Coloured dot + label, `aria-live="polite"` |
-| `VoiceOrb` | States in §8.3; props `state`, `level` (0–1) |
+| `VoiceVisualizer` | States in §8.3; props `status`, `muted`, `getLevel()` |
 | `MessageBubble` | `assistant` / `user`; `streaming`, `interrupted`, `viaVoice` flags |
 | `QuickReplyChip` | Outline chip, scrolls horizontally on mobile |
 | `Composer` | Auto-growing textarea (max 4 lines), Enter to send, Shift+Enter for a new line |
