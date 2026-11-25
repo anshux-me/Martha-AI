@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Version | 1.1 (fast-track MVP, zero-cost: Martha's voice comes from the visitor's browser) |
+| Version | 1.2 (editorial restyle: serif headlines, pill navbar, pencil car sketches) |
 | Companion docs | [`PRD.md`](PRD.md), [`specs.md`](specs.md) |
 | Direction | **Dark-first, premium EV.** Calm, minimal, confident. The conversation with Martha is the hero, not the page chrome. |
 
@@ -26,9 +26,9 @@
 | Agent | **Martha**, AI Sales Advisor |
 | Tagline | **"Electric, made personal."** |
 | Hero line | "Find your Martha in a five-minute conversation." |
-| Logo | Wordmark **MARTHA** in Space Grotesk 600, tracking +0.18em, with a small **"M" monogram**: two rising strokes forming an M, ending in a charge-bolt notch. Monochrome (text colour), with the accent used only on the notch. |
+| Logo | **Double-M monogram**: a large silver M with a smaller mint→blue M nested beneath it (favicon: same mark in a dark rounded badge with a thin ring, `app/icon.svg`). Wordmark **MARTHA** in Inter 500, tracking +0.28em. |
 | Personality | Knowledgeable friend at a showroom: warm, direct, never pushy |
-| Imagery | Unbranded studio renders or SVG silhouettes of the five models on dark gradients. **No real-brand cars, logos or photos.** |
+| Imagery | **Pencil-style side-elevation sketches** of the five models (`CarSketch.tsx`): light line work with a slight hand wobble, an offset overdraw, hatched lower-body shading, axle construction lines and a dimension line in mm; the only colour is the mint light bar. The hero sketch adds leader-line callouts. **No real-brand cars, logos or photos.** |
 
 ---
 
@@ -71,16 +71,16 @@ Defined as CSS variables in `globals.css` and mapped in `tailwind.config.ts`. Da
 
 | Role | Font | Size / line-height | Weight |
 |---|---|---|---|
-| Display (hero) | Space Grotesk | 56/60 desktop · 36/40 mobile | 600 |
-| H2 (section) | Space Grotesk | 36/42 · 28/34 | 600 |
-| H3 (card title) | Space Grotesk | 22/28 | 600 |
-| Body | Inter | 16/26 | 400 |
+| Display (hero) | Instrument Serif | 68/70 desktop · 44/45 mobile, tracking −0.01em | 400 (italic for one accent word) |
+| H2 (section) | Instrument Serif | 48 · 36 | 400 |
+| H3 (card title) | Instrument Serif | 28 / 24 | 400 |
+| Body | Inter | 16–17/26–28 | 400 |
 | Body small / captions | Inter | 14/22 | 400 |
-| Label / overline | Inter | 12/16, uppercase, +0.12em tracking | 600 |
-| Numbers (price, range, score) | Space Grotesk, tabular figures | as context | 600 |
+| Label / overline | JetBrains Mono | 11/16, uppercase, +0.14em tracking, often numbered "01 — The lineup" | 400 |
+| Numbers (price, range, score) | Inter tabular figures (cards), Instrument Serif (big stats) | as context | 400 |
 | Debug overlay | JetBrains Mono | 12/18 | 400 |
 
-Load with `next/font/google` (self-hosted at build time, no runtime calls to Google).
+Load with `next/font/google` (self-hosted at build time, no runtime calls to Google). Serif headlines + mono labels are deliberate: they avoid the generic "AI landing page" look (no neon glows, no icon-tile grids, no pulsing badges).
 
 ---
 
@@ -99,12 +99,12 @@ Load with `next/font/google` (self-hosted at build time, no runtime calls to Goo
 
 ```
 / (single page)
-├── Navbar           logo · Models · Charging · Ownership · [Talk to Martha]
-├── Hero             headline · subline · [🎙 Talk to Martha] · "Prefer to type? Chat instead" · privacy microcopy · car render
-├── Model lineup     5 model cards → "Ask Martha about <model>"
-├── Why electric     4 benefit tiles: Range · Charging · 8-yr battery warranty · Running cost
-├── How Martha works 3 steps: Tell her what you need → Get a recommendation → Get a callback (optional)
-├── Footer           fictional-brand disclaimer · privacy note · © Martha Motors (demo)
+├── Navbar           floating pill: monogram + wordmark · Models · Ownership · How it works · [Talk to Martha]
+├── Hero             mono label · serif headline · subline · [🎙 Talk to Martha] · "or type instead →" · privacy note · Fig. 1 sketch with callouts
+├── By the numbers   4 hairline-divided stats: 560 km · 28 min · 8 yrs · ₹1–1.5/km
+├── 01 — Lineup      5 spec-sheet cards (sketch, name, segment, From/Range/Seats) + a "Not sure which one?" card
+├── 02 — How it works 3 steps with hairline tops
+├── Footer           monogram, tagline, fictional-brand + privacy disclaimers; bottom row "© Martha Motors (demo)" · "Built by Anshu" (links to https://itsanshu.me/)
 └── Agent panel      overlay (sheet on desktop, full screen on mobile)
      ├── Voice view   (default)
      ├── Chat view    (backup)
@@ -117,8 +117,8 @@ No other routes. `?debug=1` shows the latency overlay.
 ## 7. Landing page
 
 ### 7.1 Navbar
-- Height 64 px, transparent over the hero; turns `--bg/80` with backdrop blur after scrolling.
-- Right side: a compact **"Talk to Martha"** pill button (accent) with a mic icon. On mobile it's the only item besides the logo and menu.
+- **Floating pill**: fixed 12–16 px from the top, max width 1080 px, height 56 px, fully rounded, 1 px `white/10` border, `#0e1013` at 75% with backdrop blur and a soft shadow.
+- Links are small rounded hover chips; the right side holds a light (`--text` background) **"Talk to Martha"** pill with a mic icon. On mobile only the logo and the button show.
 
 ### 7.2 Hero
 - Left (desktop) / top (mobile):

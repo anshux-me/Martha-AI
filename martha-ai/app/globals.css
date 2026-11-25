@@ -30,7 +30,7 @@
   --color-danger: var(--danger);
   --color-warning: var(--warning);
   --color-success: var(--success);
-  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
   --radius-sm: 8px;

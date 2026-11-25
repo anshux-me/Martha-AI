@@ -74,7 +74,7 @@ export function ReportCard({
   if (!report) {
     return (
       <div className="flex flex-col gap-5 p-5">
-        <h3 className="font-display text-xl font-semibold">Call summary</h3>
+        <h3 className="font-display text-2xl">Call summary</h3>
         <p className="rounded-md border border-danger/40 bg-danger/10 p-3 text-sm">{error ?? "No report available."}</p>
         <button
           type="button"
@@ -109,7 +109,7 @@ export function ReportCard({
     <div className="flex flex-col gap-5 p-5">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h3 className="font-display text-xl font-semibold">Call summary</h3>
+          <h3 className="font-display text-2xl">Call summary</h3>
           <p className="mt-1 text-sm text-muted">
             {fmtDuration(report.meta.durationSec)} · {report.meta.mode === "voice" ? "Voice" : "Chat"} ·{" "}
             {report.meta.turns} messages

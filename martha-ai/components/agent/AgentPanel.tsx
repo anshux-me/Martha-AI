@@ -71,7 +71,7 @@ export function AgentPanel() {
             aria-hidden="true"
           />
           <div className="min-w-0 flex-1">
-            <div className="truncate font-display font-semibold leading-tight">Martha</div>
+            <div className="truncate font-medium leading-tight">Martha</div>
             <div className="flex items-center gap-1.5 whitespace-nowrap text-xs text-muted" role="status" aria-live="polite">
               <span className={`size-1.5 rounded-full ${STATUS_DOT[a.status]} ${live ? "pulse-dot" : ""}`} />
               <span>{statusLabel}</span>
@@ -257,7 +257,7 @@ export function AgentPanel() {
         {confirmEnd && (
           <div className="absolute inset-0 z-10 grid place-items-center bg-black/60 p-6">
             <div className="rise w-full max-w-sm rounded-md border border-border bg-surface-2 p-5">
-              <p className="font-display text-lg font-semibold">End the conversation?</p>
+              <p className="font-display text-xl">End the conversation?</p>
               <p className="mt-2 text-sm text-muted">You&apos;ll get a summary and can download your transcript.</p>
               <div className="mt-5 flex justify-end gap-2">
                 <button type="button" onClick={() => setConfirmEnd(false)} className="rounded-full px-4 py-2 text-sm">
@@ -322,7 +322,7 @@ function MicPrimer({ onAllow, onChat }: { onAllow: () => void; onChat: () => voi
         <Mic className="size-7" />
       </div>
       <div>
-        <h3 className="font-display text-xl font-semibold">Martha needs your microphone</h3>
+        <h3 className="font-display text-2xl">Martha needs your microphone</h3>
         <p className="mt-2 text-sm leading-6 text-muted">
           Audio is only used to transcribe what you say. Nothing is stored on our servers.
         </p>

@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const display = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin"], weight: ["500", "600"] });
+const display = Instrument_Serif({ variable: "--font-instrument", subsets: ["latin"], weight: "400", style: ["normal", "italic"] });
 const sans = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], weight: ["400"] });
 

@@ -1,105 +1,142 @@
 "use client";
-import { BatteryCharging, IndianRupee, Mic, Route, ShieldCheck, Users, Zap } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowRight, Mic } from "lucide-react";
 import { useAgentUI } from "@/components/agent/AgentProvider";
-import { CarSilhouette } from "@/components/landing/CarSilhouette";
+import { CarSketch } from "@/components/landing/CarSketch";
 import { catalogue, maxRange, priceRange } from "@/lib/knowledge/catalogue";
 
-function Logo() {
+function Monogram({ className = "size-7" }: { className?: string }) {
+  // Double-M monogram (same as app/icon.svg)
   return (
-    <span className="flex items-center gap-2.5">
-      {/* Double-M monogram (same as app/icon.svg) */}
-      <svg viewBox="10 10 44 44" className="size-8" aria-hidden="true">
-        <defs>
-          <linearGradient id="logo-volt" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#2ee6a6" />
-            <stop offset="1" stopColor="#4c8dff" />
-          </linearGradient>
-        </defs>
-        <path d="M14.5 38 L20.5 14.5 L32 29.5 L43.5 14.5 L49.5 38" fill="none" stroke="currentColor" strokeWidth="4.6" strokeLinejoin="round" strokeLinecap="round" />
-        <path d="M21 50 L25.5 35.5 L32 43.5 L38.5 35.5 L43 50" fill="none" stroke="url(#logo-volt)" strokeWidth="3.6" strokeLinejoin="round" strokeLinecap="round" />
-      </svg>
-      <span className="font-display text-lg font-semibold tracking-[0.18em]">MARTHA</span>
+    <svg viewBox="10 10 44 44" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="logo-volt" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#2ee6a6" />
+          <stop offset="1" stopColor="#4c8dff" />
+        </linearGradient>
+      </defs>
+      <path d="M14.5 38 L20.5 14.5 L32 29.5 L43.5 14.5 L49.5 38" fill="none" stroke="currentColor" strokeWidth="4.6" strokeLinejoin="round" strokeLinecap="round" />
+      <path d="M21 50 L25.5 35.5 L32 43.5 L38.5 35.5 L43 50" fill="none" stroke="url(#logo-volt)" strokeWidth="3.6" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function Wordmark() {
+  return (
+    <span className="flex items-center gap-2">
+      <Monogram />
+      <span className="text-[13px] font-medium tracking-[0.28em]">MARTHA</span>
     </span>
+  );
+}
+
+function Label({ n, children }: { n?: string; children: React.ReactNode }) {
+  return (
+    <p className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
+      {n && <span className="text-text/70">{n} — </span>}
+      {children}
+    </p>
   );
 }
 
 function Navbar() {
   const { open } = useAgentUI();
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
   return (
-    <nav
-      className={`fixed inset-x-0 top-0 z-40 h-16 transition ${scrolled ? "bg-bg/80 backdrop-blur border-b border-border" : ""}`}
-    >
-      <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between px-4 sm:px-6">
+    <div className="fixed inset-x-0 top-3 z-40 px-3 sm:top-4">
+      <nav className="mx-auto flex h-14 max-w-[1080px] items-center justify-between rounded-full border border-white/10 bg-[#0e1013]/75 pr-2 pl-5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md">
         <a href="#top" aria-label="Martha Motors home">
-          <Logo />
+          <Wordmark />
         </a>
-        <div className="hidden items-center gap-8 text-sm text-muted md:flex">
-          <a href="#models" className="hover:text-text">Models</a>
-          <a href="#charging" className="hover:text-text">Charging</a>
-          <a href="#how" className="hover:text-text">How Martha works</a>
+        <div className="hidden items-center gap-1 text-sm text-muted md:flex">
+          {[
+            ["Models", "#models"],
+            ["Ownership", "#numbers"],
+            ["How it works", "#how"],
+          ].map(([label, href]) => (
+            <a key={href} href={href} className="rounded-full px-3.5 py-1.5 transition hover:bg-white/5 hover:text-text">
+              {label}
+            </a>
+          ))}
         </div>
         <button
           type="button"
           onClick={() => open("voice")}
-          className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-fg transition hover:brightness-110"
+          className="inline-flex h-10 items-center gap-2 rounded-full bg-text px-4 text-sm font-medium text-bg transition hover:bg-white"
         >
           <Mic className="size-4" /> Talk to Martha
         </button>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
 
 function Hero() {
   const { open } = useAgentUI();
   return (
-    <section id="top" className="hero-glow relative overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-24">
-      <div className="mx-auto grid max-w-[1200px] items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
+    <section id="top" className="pt-32 pb-14 sm:pt-40 sm:pb-20">
+      <div className="mx-auto grid max-w-[1080px] items-center gap-12 px-5 lg:grid-cols-[1.05fr_1fr]">
         <div>
-          <p className="text-xs font-semibold tracking-[0.12em] text-accent uppercase">Meet Martha · Your AI EV advisor</p>
-          <h1 className="mt-4 font-display text-4xl leading-[1.1] font-semibold sm:text-[56px] sm:leading-[60px]">
-            Find your Martha in a five-minute conversation.
+          <Label>Martha Motors · AI sales advisor</Label>
+          <h1 className="mt-5 font-display text-[44px] leading-[1.02] tracking-[-0.01em] sm:text-[68px]">
+            Find the right electric car in a <em className="text-accent not-italic sm:italic">five-minute</em> conversation.
           </h1>
-          <p className="mt-5 max-w-xl text-lg leading-8 text-muted">
-            Tell Martha how you drive and what you can spend. She&apos;ll match you with the right electric car, answer
-            every question, and arrange a call back if you&apos;d like.
+          <p className="mt-6 max-w-[34rem] text-[17px] leading-7 text-muted">
+            Tell Martha how far you drive, who rides with you and what you want to spend. She&apos;ll suggest a car,
+            answer the awkward questions about charging and batteries, and ask our team to call you only if you want
+            that.
           </p>
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
             <button
               type="button"
               onClick={() => open("voice")}
-              className="inline-flex h-14 items-center justify-center gap-2.5 rounded-full bg-accent px-8 text-lg font-semibold text-accent-fg shadow-[0_0_40px_rgba(46,230,166,0.25)] transition hover:brightness-110"
+              className="inline-flex h-13 items-center justify-center gap-2.5 rounded-full bg-accent px-7 text-[16px] font-medium text-accent-fg transition hover:brightness-105"
             >
-              <Mic className="size-5" /> Talk to Martha
+              <Mic className="size-[18px]" /> Talk to Martha
             </button>
             <button
               type="button"
               onClick={() => open("chat")}
-              className="text-center text-muted underline-offset-4 hover:text-text hover:underline"
+              className="inline-flex items-center justify-center gap-1.5 text-[15px] text-muted transition hover:text-text"
             >
-              Prefer to type? Chat instead →
+              or type instead <ArrowRight className="size-4" />
             </button>
           </div>
-          <p className="mt-5 flex items-center gap-1.5 text-[13px] text-muted">
-            <ShieldCheck className="size-4 shrink-0" />
-            You&apos;ll be talking to an AI. Uses your microphone. Nothing is stored on our servers.
+          <p className="mt-6 max-w-md text-[13px] leading-5 text-muted/80">
+            Martha is an AI and uses your microphone. Nothing you say is stored on our servers.
           </p>
         </div>
-        <div className="relative">
-          <CarSilhouette bodyType="SUV" className="w-full drop-shadow-[0_20px_60px_rgba(46,230,166,0.15)]" />
-          <div className="absolute top-2 right-2 flex items-center gap-2 rounded-full border border-border bg-surface/80 px-3 py-1.5 text-sm backdrop-blur sm:top-6 sm:right-6">
-            <span className="pulse-dot size-2 rounded-full bg-accent" /> Martha is online
+        <figure className="text-[#cfd5dd]">
+          <CarSketch model="terra" annotate className="w-full" />
+          <figcaption className="mt-3 border-t border-white/10 pt-3 font-mono text-[11px] tracking-[0.12em] text-muted uppercase">
+            Fig. 1 — Martha Terra Long Range, side elevation
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+  );
+}
+
+function Numbers() {
+  const items = [
+    ["560", "km", "Longest range in the lineup (Aero Long Range)"],
+    ["28", "min", "10–80% on a FastCharge DC point (Terra)"],
+    ["8", "yrs", "Battery warranty, or 1,60,000 km"],
+    ["₹1–1.5", "/km", "Charging at home, vs ₹6–8 for petrol"],
+  ];
+  return (
+    <section id="numbers" className="border-y border-white/10">
+      <div className="mx-auto grid max-w-[1080px] grid-cols-2 lg:grid-cols-4">
+        {items.map(([num, unit, text], i) => (
+          <div
+            key={text}
+            className={`px-5 py-8 sm:py-10 ${i % 2 === 1 ? "border-l border-white/10" : ""} ${i >= 2 ? "border-t border-white/10 lg:border-t-0" : ""} ${i === 2 ? "lg:border-l" : ""}`}
+          >
+            <p className="font-display text-[42px] leading-none sm:text-5xl">
+              {num}
+              <span className="ml-1 font-mono text-sm text-muted">{unit}</span>
+            </p>
+            <p className="mt-3 max-w-[16rem] text-sm leading-5 text-muted">{text}</p>
           </div>
-          <p className="mt-2 text-center text-sm text-muted">Martha Terra · Mid-size SUV</p>
-        </div>
+        ))}
       </div>
     </section>
   );
@@ -108,70 +145,68 @@ function Hero() {
 function ModelLineup() {
   const { open } = useAgentUI();
   return (
-    <section id="models" className="py-16 sm:py-24">
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-        <p className="text-xs font-semibold tracking-[0.12em] text-muted uppercase">The lineup</p>
-        <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">Five electric cars. One honest advisor.</h2>
-        <div className="-mx-4 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3">
+    <section id="models" className="py-20 sm:py-28">
+      <div className="mx-auto max-w-[1080px] px-5">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <Label n="01">The lineup</Label>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl">Five cars, drawn to size.</h2>
+          </div>
+          <p className="max-w-sm text-sm leading-6 text-muted">
+            Ex-showroom prices. On-road prices, offers and exchange values come from our sales team.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-px overflow-hidden rounded-[14px] border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
           {catalogue.map((m) => {
             const short = m.name.replace("Martha ", "");
             return (
-              <article
-                key={m.id}
-                className="flex w-[82%] shrink-0 snap-start flex-col rounded-md border border-border bg-surface p-5 sm:w-auto"
-              >
-                <div className="aspect-video rounded-sm bg-gradient-to-b from-surface-2 to-surface p-2">
-                  <CarSilhouette bodyType={m.bodyType} className="h-full w-full" />
+              <article key={m.id} className="flex flex-col bg-bg p-5 sm:p-6">
+                <div className="text-[#c9cfd8]">
+                  <CarSketch model={m.id} className="w-full" />
                 </div>
-                <div className="mt-4 flex items-baseline justify-between gap-2">
-                  <h3 className="font-display text-[22px] font-semibold uppercase tracking-wide">{m.name}</h3>
-                  <span className="text-right text-sm text-muted">{m.segment}</span>
+                <div className="mt-5 flex items-baseline justify-between gap-3">
+                  <h3 className="font-display text-[28px] leading-none">{short}</h3>
+                  <span className="font-mono text-[11px] tracking-[0.08em] text-muted uppercase">{m.segment}</span>
                 </div>
-                <p className="tabular mt-2 font-display text-2xl font-semibold">From ₹{priceRange(m).min.toFixed(1)} L</p>
-                <p className="mt-2 flex items-center gap-4 text-sm text-muted">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Zap className="size-4 text-accent" /> Up to {maxRange(m)} km
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Users className="size-4 text-accent" /> {m.seats} seats
-                  </span>
-                </p>
+                <dl className="mt-5 grid grid-cols-3 border-t border-white/10 pt-4 text-sm">
+                  <div>
+                    <dt className="font-mono text-[10px] tracking-[0.12em] text-muted uppercase">From</dt>
+                    <dd className="mt-1 tabular">₹{priceRange(m).min.toFixed(1)} L</dd>
+                  </div>
+                  <div>
+                    <dt className="font-mono text-[10px] tracking-[0.12em] text-muted uppercase">Range</dt>
+                    <dd className="mt-1 tabular">{maxRange(m)} km</dd>
+                  </div>
+                  <div>
+                    <dt className="font-mono text-[10px] tracking-[0.12em] text-muted uppercase">Seats</dt>
+                    <dd className="mt-1 tabular">{m.seats}</dd>
+                  </div>
+                </dl>
                 <button
                   type="button"
                   onClick={() => open("chat", `Tell me about the ${m.name}.`)}
-                  className="mt-5 self-start rounded-full border border-border px-4 py-2 text-sm transition hover:border-accent hover:text-accent"
+                  className="mt-6 inline-flex items-center gap-1.5 self-start text-sm text-text/80 underline decoration-white/20 underline-offset-4 transition hover:text-accent hover:decoration-accent"
                 >
-                  Ask Martha about {short} →
+                  Ask Martha about the {short} <ArrowRight className="size-3.5" />
                 </button>
               </article>
             );
           })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Benefits() {
-  const items = [
-    { icon: Route, title: "Up to 560 km range", text: "Real-world range for city weeks and highway weekends." },
-    { icon: BatteryCharging, title: "Charge at home", text: "A 7.4 kW wallbox comes with every Martha, installed free." },
-    { icon: ShieldCheck, title: "8-year battery warranty", text: "Covered for 8 years or 1,60,000 km." },
-    { icon: IndianRupee, title: "₹1–1.5 per km", text: "Running costs a fraction of petrol." },
-  ];
-  return (
-    <section id="charging" className="border-y border-border bg-surface/50 py-16 sm:py-24">
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-        <p className="text-xs font-semibold tracking-[0.12em] text-muted uppercase">Why electric</p>
-        <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">Less to worry about.</h2>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map(({ icon: Icon, title, text }) => (
-            <div key={title}>
-              <Icon className="size-6 text-accent" />
-              <h3 className="mt-3 font-display text-lg font-semibold">{title}</h3>
-              <p className="mt-1 text-sm leading-6 text-muted">{text}</p>
-            </div>
-          ))}
+          <article className="flex flex-col justify-between bg-bg p-6">
+            <p className="font-display text-[28px] leading-tight">Not sure which one?</p>
+            <p className="mt-3 text-sm leading-6 text-muted">
+              Most people ask Martha about range on highway trips, charging in an apartment and the EMI. Ask her
+              anything.
+            </p>
+            <button
+              type="button"
+              onClick={() => open("voice")}
+              className="mt-6 inline-flex h-11 items-center gap-2 self-start rounded-full border border-white/15 px-5 text-sm transition hover:border-accent hover:text-accent"
+            >
+              <Mic className="size-4" /> Talk to Martha
+            </button>
+          </article>
         </div>
       </div>
     </section>
@@ -179,33 +214,25 @@ function Benefits() {
 }
 
 function HowItWorks() {
-  const { open } = useAgentUI();
   const steps = [
-    ["Tell her what you need", "Budget, family size, daily drive, charging at home."],
-    ["Get a recommendation", "The right model and trim, with honest answers to every question."],
-    ["Get a callback (optional)", "If you'd like, our sales team calls you at a time that suits you."],
+    ["Tell her how you drive", "Budget, family size, daily distance, whether you can charge at home."],
+    ["Get a straight answer", "One or two cars that fit, with the reasons, and honest answers on range, charging and cost."],
+    ["Decide what happens next", "If you'd like a call from sales, she takes your number. If not, you leave with a written summary."],
   ];
   return (
-    <section id="how" className="py-16 sm:py-24">
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-        <p className="text-xs font-semibold tracking-[0.12em] text-muted uppercase">How Martha works</p>
-        <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">A conversation, not a form.</h2>
-        <ol className="mt-10 grid gap-8 sm:grid-cols-3">
+    <section id="how" className="border-t border-white/10 py-20 sm:py-28">
+      <div className="mx-auto max-w-[1080px] px-5">
+        <Label n="02">How it works</Label>
+        <h2 className="mt-3 max-w-xl font-display text-4xl sm:text-5xl">A conversation, not a form.</h2>
+        <ol className="mt-12 grid gap-10 sm:grid-cols-3 sm:gap-8">
           {steps.map(([t, d], i) => (
-            <li key={t}>
-              <span className="tabular font-display text-5xl font-semibold text-border">0{i + 1}</span>
-              <h3 className="mt-2 font-display text-lg font-semibold">{t}</h3>
-              <p className="mt-1 text-sm leading-6 text-muted">{d}</p>
+            <li key={t} className="border-t border-white/15 pt-5">
+              <span className="font-mono text-xs text-muted">0{i + 1}</span>
+              <h3 className="mt-3 font-display text-2xl">{t}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">{d}</p>
             </li>
           ))}
         </ol>
-        <button
-          type="button"
-          onClick={() => open("voice")}
-          className="mt-12 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-semibold text-accent-fg transition hover:brightness-110"
-        >
-          <Mic className="size-5" /> Talk to Martha
-        </button>
       </div>
     </section>
   );
@@ -213,20 +240,39 @@ function HowItWorks() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border py-10 text-sm text-muted">
-      <div className="mx-auto flex max-w-[1200px] flex-col gap-4 px-4 sm:px-6">
-        <Logo />
-        <p>
-          Martha Motors is a fictional brand created for a product demo. All vehicles, specifications and prices are
-          illustrative.
-        </p>
-        <p>
-          Martha is an AI assistant and can make mistakes. Nothing is stored on our servers; your conversation stays in
-          this browser. To reply to you, your voice and messages are processed by Groq, and by Google if a backup
-          service is used (Google may use data from its free service to improve its products). Martha&apos;s voice is
-          generated on your device.
-        </p>
-        <p>© {new Date().getFullYear()} Martha Motors (demo)</p>
+    <footer className="border-t border-white/10 pt-14 pb-8 text-sm text-muted">
+      <div className="mx-auto max-w-[1080px] px-5">
+        <div className="grid gap-8 sm:grid-cols-[1fr_1.4fr]">
+          <div className="text-text">
+            <Wordmark />
+            <p className="mt-4 max-w-xs text-sm leading-6 text-muted">Electric, made personal.</p>
+          </div>
+          <div className="space-y-3 leading-6">
+            <p>
+              Martha Motors is a fictional brand made for a product demo. Every car, specification and price on this
+              site is illustrative.
+            </p>
+            <p>
+              Martha is an AI assistant and can get things wrong. Nothing is stored on our servers; your conversation
+              stays in this browser. To reply, your voice and messages are processed by Groq, and by Google if a
+              backup service is used (Google may use data from its free service to improve its products).
+            </p>
+          </div>
+        </div>
+        <div className="mt-12 flex flex-col gap-2 border-t border-white/10 pt-6 text-[13px] sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} Martha Motors (demo)</p>
+          <p>
+            Built by{" "}
+            <a
+              href="https://itsanshu.me/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-text underline decoration-white/30 underline-offset-4 transition hover:text-accent hover:decoration-accent"
+            >
+              Anshu
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
@@ -238,8 +284,8 @@ export function Landing() {
       <Navbar />
       <main>
         <Hero />
+        <Numbers />
         <ModelLineup />
-        <Benefits />
         <HowItWorks />
       </main>
       <Footer />
