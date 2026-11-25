@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens (design.md §3) — dark-first ---------- */
+:root {
+  --bg: #0a0b0d;
+  --surface: #121418;
+  --surface-2: #1a1d23;
+  --border: #262a31;
+  --text: #f2f4f7;
+  --text-muted: #9aa3af;
+  --accent: #2ee6a6;
+  --accent-fg: #04140e;
+  --accent-2: #4c8dff;
+  --danger: #f2555a;
+  --warning: #f5b83d;
+  --success: #2ee6a6;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-2: var(--accent-2);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-glow {
+  background: radial-gradient(60% 50% at 70% 40%, rgba(46, 230, 166, 0.18), transparent 70%);
+}
+
+/* ---------- Voice orb ---------- */
+.orb {
+  position: relative;
+  border-radius: 9999px;
+  transition: filter 300ms ease, opacity 300ms ease;
+}
+.orb-core {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent));
+  filter: blur(2px);
+  will-change: transform;
+}
+.orb-shine {
+  position: absolute;
+  inset: 10%;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.35), transparent 55%), rgba(10, 11, 13, 0.25);
+}
+.orb-ring {
+  position: absolute;
+  inset: -10px;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+}
+.orb[data-state="listening"] .orb-core {
+  animation: orb-breathe 3s ease-in-out infinite;
+}
+.orb[data-state="thinking"] .orb-core {
+  background: conic-gradient(from 0deg, var(--accent-2), transparent 40%, var(--accent-2) 70%, var(--accent));
+  animation: orb-spin 1.2s linear infinite;
+}
+.orb[data-state="speaking"] .orb-core {
+  animation: orb-talk 1.4s ease-in-out infinite;
+}
+.orb[data-state="connecting"] .orb-core,
+.orb[data-state="transcribing"] .orb-core {
+  animation: orb-spin 3s linear infinite;
+  opacity: 0.7;
+}
+.orb[data-state="muted"] {
+  filter: grayscale(1) brightness(0.6);
+}
+.orb[data-state="idle"] .orb-core,
+.orb[data-state="primer"] .orb-core {
+  opacity: 0.6;
+  animation: orb-breathe 5s ease-in-out infinite;
+}
+.orb[data-state="thinking"] .orb-ring {
+  border-color: color-mix(in srgb, var(--accent-2) 50%, transparent);
+  animation: orb-spin 2s linear infinite reverse;
+  border-top-color: transparent;
+}
+
+@keyframes orb-breathe {
+  0%, 100% { scale: 1; }
+  50% { scale: 1.04; }
+}
+@keyframes orb-spin {
+  to { rotate: 360deg; }
+}
+@keyframes orb-talk {
+  0%, 100% { scale: 1; rotate: 0deg; }
+  50% { scale: 1.03; rotate: 20deg; }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.pulse-dot {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+@keyframes caret {
+  50% { opacity: 0; }
+}
+.caret::after {
+  content: "▍";
+  margin-left: 2px;
+  animation: caret 1s step-end infinite;
+  color: var(--accent);
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  animation: rise 180ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
