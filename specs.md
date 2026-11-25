@@ -25,7 +25,7 @@
 | VAD (browser) | `@ricky0123/vad-web` (Silero VAD, ONNX in the browser) | Free (MIT) | End-of-speech detection on the client |
 | Validation | `zod` | Free | Request and LLM-output schemas |
 | Client state | React hooks + `localStorage` | ₹0 | No server storage |
-| Hosting | **Vercel Hobby** | ₹0 | HTTPS, `*.vercel.app` URL, serverless + streaming. Non-commercial use only, which suits a demo. |
+| Hosting | **Render free web service** (`render.yaml` Blueprint) | ₹0 | One service for frontend + API, HTTPS `*.onrender.com` URL, streaming. Sleeps after ~15 min idle. |
 | Repo / CI | GitHub (public repo) + GitHub Actions | ₹0 | Lint, typecheck, unit tests |
 
 > **Check before building:** model IDs and free-tier limits change often. Every model name is an environment variable. Check your actual limits at **console.groq.com → Settings → Limits** and in Google AI Studio. No credit card is needed for any of the above.
@@ -63,7 +63,7 @@
 │   localStorage: martha.session.v1 (messages, mode, report, voice prefs)  │
 └───────────────────────────────────────────────┬───────────────────────────┘
                                                 │ HTTPS
-┌──────────────────── Next.js API on Vercel Hobby (stateless) ──────────────┐
+┌──────────────────── Next.js API on Render (stateless) ────────────────────┐
 │  /api/stt     validate → Groq Whisper                     → { text }      │
 │  /api/chat    validate → system prompt + history → LLM chain → SSE        │
 │  /api/report  validate → LLM chain (JSON) → scoring rubric → report       │
@@ -511,7 +511,7 @@ Phone is valid if it matches `/^(\+91[\s-]?)?[6-9]\d{9}$/` after removing spaces
 | STT | Groq Whisper free + browser recognition fallback | Groq paid / enterprise tier |
 | LLM | Groq free chain + Gemini free | Groq paid tier (dedicated capacity at scale) with a second paid provider as failover |
 | TTS | Browser speech | Browser speech (still free), optional premium neural voice |
-| Hosting | Vercel Hobby | Vercel Pro or Google Cloud Run |
+| Hosting | Render free web service | Render paid instances, Vercel Pro or Google Cloud Run |
 | Rate limiting | In-memory per instance | Upstash Redis (distributed sliding window) |
 | Capacity | ~5–15+ conversations/day | 1,00,000 users / ~2,000 concurrent sessions |
 
@@ -584,14 +584,28 @@ For comparison, 150k human calls at about ₹35 each is about **₹52 lakh per m
 
 ---
 
-## 14. Deployment (free)
-1. Push to a **public GitHub repo**. GitHub Actions runs lint, typecheck and vitest on every push.
-2. **Vercel Hobby:** import the repo and set `GROQ_API_KEY`, `GEMINI_API_KEY` and the chains in Project → Settings → Environment Variables.
-3. On API routes: `export const runtime = "nodejs"`, with `maxDuration` within the Hobby plan limit (check the current value). Chat replies are ≤ 250 tokens and reports are one call, so both finish in a few seconds.
-4. Every branch gets a preview URL; `main` deploys to `martha-ai-<name>.vercel.app`.
-5. **Local development:** `npm run dev` on `http://localhost:3000`. The mic works on localhost without HTTPS.
+## 14. Deployment (free): Render
 
-**Free alternatives:** Cloudflare Pages + Workers (via the OpenNext adapter) or Netlify. Avoid hosts that sleep on the free tier (cold starts of 30 s or more would ruin a live demo).
+The repo root holds a **Render Blueprint** (`render.yaml`). One **web service** (`martha-ai`, Node 22, free plan, Singapore region) runs the Next.js app, which serves both the frontend and the `/api` backend, so one URL and one deploy cover everything.
+
+| Setting | Value |
+|---|---|
+| Root directory | `martha-ai` |
+| Build | `npm ci && npm run build` (postinstall copies the VAD model into `public/vad`) |
+| Start | `npm start` (Next.js listens on Render's `$PORT`) |
+| Health check | `/api/health` |
+| Auto-deploy | On every commit to the connected branch |
+| Secrets | `GROQ_API_KEY` (required), `GEMINI_API_KEY` (optional): entered in the dashboard when the Blueprint is applied, never committed |
+| Other settings | Model chains, TTS engine/voice, limits: set as plain values in `render.yaml` |
+
+**Steps:**
+1. Render dashboard → New → Blueprint → connect the GitHub repo.
+2. Enter the secret values when prompted, then Apply.
+3. The app goes live at `https://martha-ai-xxxx.onrender.com` with HTTPS, so the microphone works.
+
+**Free-plan caveat:** the service sleeps after ~15 minutes idle, and the first request afterwards takes about a minute. Open the URL shortly before a demo. For production, a paid instance (no sleep) or Vercel / Cloud Run would be used; the app needs no code changes for any of them.
+
+**Local development:** `npm run dev` on `http://localhost:3000`. The mic works on localhost without HTTPS.
 
 ---
 

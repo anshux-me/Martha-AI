@@ -58,7 +58,7 @@ A 24/7 AI sales advisor that talks to buyers the moment they arrive. It recommen
 | S6 | **Lead qualification and sentiment**: extracted at the end of the call and scored with a fixed rubric |
 | S7 | **Callback request** captured during the conversation (the conversion action) |
 | S8 | **End-of-call report and transcript download** (`.txt` / `.md` / `.json`) |
-| S9 | Free cloud deployment (Vercel Hobby) with a public HTTPS URL |
+| S9 | Free cloud deployment (Render, one web service via `render.yaml`) with a public HTTPS URL |
 
 ### 3.2 Out of scope (MVP)
 | Excluded | Reason / later |
@@ -89,7 +89,7 @@ A 24/7 AI sales advisor that talks to buyers the moment they arrive. It recommen
 | Speech-to-text | Groq Whisper `whisper-large-v3-turbo`, free tier | The browser's built-in speech recognition (Web Speech API) |
 | LLM | Groq free tier, as a chain of models (next model on rate-limit) | Google Gemini API free tier |
 | Martha's voice | **Groq Orpheus** (`canopylabs/orpheus-v1-english`), free tier | The browser's built-in speech synthesis (automatic on rate limit or error) |
-| Hosting | Vercel Hobby (free HTTPS + `*.vercel.app` URL) | — |
+| Hosting | Render free web service (HTTPS `*.onrender.com` URL) | — |
 | Storage | Browser `localStorage` | In-memory only |
 
 Orpheus needs the model terms accepted once in the Groq console. Its free tier is only about 10 requests a minute and 100 a day, so the app sends the first sentence of each reply alone (fast start) and merges the rest into chunks of up to ~200 characters; when the limit is reached, Martha switches to the browser's voice for the rest of the session.
@@ -347,7 +347,7 @@ For each trim: battery (kWh), range, 0–100 km/h, top speed, AC and DC charge t
 
 ### 11.1 Cost
 
-**MVP / demo: ₹0.** Groq free tier (speech-to-text and LLM), Gemini free tier (fallback), the browser's built-in speech for Martha's voice, and Vercel Hobby hosting.
+**MVP / demo: ₹0.** Groq free tier (speech-to-text and LLM), Gemini free tier (fallback), the browser's built-in speech for Martha's voice, and Render free hosting.
 
 **Production (paid upgrade, same architecture).** Approximate figures; check current pricing. For a 5-minute conversation of about 15 turns:
 
@@ -390,7 +390,7 @@ A human pre-sales caller costs about ₹30–40 per call, works shift hours and 
 | 3 | Barge-in, call states, voice ↔ chat switching, automatic fallback, `localStorage` session |
 | 4 | `/api/report`, scoring rubric, report card, downloads |
 | 5 | Branded landing page and polish (design.md) |
-| 6 | Hardening: model fallback chain, STT fallback, rate limits, validation, error states, latency logging, eval set; free deploy on Vercel Hobby |
+| 6 | Hardening: model fallback chain, STT fallback, rate limits, validation, error states, latency logging, eval set; free deploy on Render |
 | 7 | Architecture diagram, scale / cost / security write-up, demo rehearsal, backup video |
 
 ---

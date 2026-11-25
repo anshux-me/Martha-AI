@@ -6,7 +6,7 @@ A voice-first AI sales advisor for **Martha Motors**, a fictional EV brand. Visi
 - Speech-to-text: Groq Whisper (free tier)
 - Replies: Groq LLMs (free tier), with Google Gemini (free tier) as fallback
 - Martha's voice: Groq Orpheus (free tier), with the browser's built-in speech as automatic fallback
-- Hosting: Vercel Hobby
+- Hosting: Render (free web service, one `render.yaml` Blueprint)
 - Storage: none on the server. The conversation lives in the visitor's `localStorage`.
 
 Product, technical and design docs: [`../PRD.md`](../PRD.md), [`../specs.md`](../specs.md), [`../design.md`](../design.md).
@@ -57,12 +57,16 @@ Browser: mic → Silero VAD (end of speech) → POST /api/stt ──► Groq Whi
 - If an LLM is rate-limited or has been removed, the next model in the chain takes over.
 - If the mic is blocked or the browser can't do voice, the app switches to chat, keeping the conversation.
 
-## Deploy (free)
+## Deploy on Render (free)
 
-1. Push to GitHub.
-2. Import the repo in Vercel (Hobby plan).
-3. Set `GROQ_API_KEY`, and optionally `GEMINI_API_KEY`, in Project → Settings → Environment Variables.
-4. Deploy.
+The repo root has a [`render.yaml`](../render.yaml) Blueprint. One Render web service runs this Next.js app, which serves both the frontend pages and the `/api` backend.
+
+1. In the Render dashboard: **New → Blueprint**, connect `github.com/anshux-me/Martha-AI`.
+2. Render reads `render.yaml` and asks for `GROQ_API_KEY` (required) and `GEMINI_API_KEY` (optional; leave empty to skip).
+3. Click **Apply**. The first build takes a few minutes; the app is then live at `https://martha-ai-xxxx.onrender.com`.
+4. Every push to `main` redeploys automatically.
+
+Free instances sleep after about 15 minutes without traffic, and the first request after that takes about a minute. Open the URL a few minutes before a demo to wake it up.
 
 `GET /api/health` shows which models are configured and whether each provider has a key.
 

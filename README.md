@@ -6,7 +6,7 @@ A voice-first AI sales agent for **Martha Motors**, a fictional Indian EV brand.
 - Speech-to-text: Groq Whisper
 - Replies: Groq LLMs, with Gemini as fallback
 - Martha's voice: Groq Orpheus, with the browser's built-in voice as fallback
-- Hosting: Vercel Hobby
+- Hosting: Render (free web service, one `render.yaml` Blueprint)
 
 No login and no server-side storage: the conversation stays in the visitor's browser.
 

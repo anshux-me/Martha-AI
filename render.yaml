@@ -1,0 +1,47 @@
+# Render Blueprint for Martha AI.
+# One web service hosts both the frontend (Next.js pages) and the backend (Next.js /api routes).
+# Render dashboard → New → Blueprint → connect github.com/anshux-me/Martha-AI → Apply.
+services:
+  - type: web
+    name: martha-ai
+    runtime: node
+    plan: free                # free instances sleep after ~15 min idle; first request then takes ~1 min
+    region: singapore         # closest Render region to India
+    rootDir: martha-ai        # the Next.js app lives in this folder
+    buildCommand: npm ci && npm run build   # npm ci also runs postinstall (copies the voice-activity model)
+    startCommand: npm start                 # next start listens on Render's $PORT automatically
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit # redeploy on every push to the connected branch
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      # Secrets: Render asks for these when you apply the Blueprint (never committed).
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY   # optional fallback LLM; leave empty if you don't have one
+        sync: false
+      # Models and behaviour (same defaults as .env.example)
+      - key: GROQ_STT_MODEL
+        value: whisper-large-v3-turbo
+      - key: CHAT_CHAIN
+        value: groq:openai/gpt-oss-120b,groq:openai/gpt-oss-20b,groq:qwen/qwen3.8-27b,gemini:gemini-flash-lite-latest
+      - key: REPORT_CHAIN
+        value: groq:openai/gpt-oss-120b,groq:openai/gpt-oss-20b,gemini:gemini-flash-latest
+      - key: REASONING_EFFORT
+        value: low
+      - key: CHAT_TEMPERATURE
+        value: "0.4"
+      - key: CHAT_MAX_TOKENS
+        value: "250"
+      - key: HISTORY_MAX_MESSAGES
+        value: "12"
+      - key: RATE_LIMIT_PER_MIN
+        value: "60"
+      - key: TTS_ENGINE
+        value: groq           # Groq Orpheus voice; falls back to the browser voice automatically
+      - key: GROQ_TTS_MODEL
+        value: canopylabs/orpheus-v1-english
+      - key: GROQ_TTS_VOICE
+        value: hannah
